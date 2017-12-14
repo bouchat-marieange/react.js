@@ -1,8 +1,6 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+import React from 'react'; //différent de import React, {Component} from 'react'; parce que que cette fois react n'a pas besoin de components
+import ReactDOM from 'react-dom'; // C'est lui qui gère l'affichage dans le DOM
+import './index.css'; // import du css (généralement c'est le seul endroit où le css doit être importer - certains codeurs place le css dircectement dans le fichiers html de chaque components ou dans des dossiers à part contenant le fichier js du component et le fichier css uniquement lié au component et portant le même nom que le components de manière à rendre chaque component totalement indépendants et réutilisable dans d'autres projets plus facilement.)
+import Welcome from './Welcome'; // import du composant créé précédement (il n'est pas écrit Welcome.js et c'est normal, par défaut node.js le comprend, mais si l'extension est différente et n'est pas du js, il faut le préciser)
 
-ReactDOM.render(<App />, document.getElementById('root'));
-registerServiceWorker();
+ReactDOM.render(<Welcome />, document.getElementById('root')); // fonction pour afficher quelque chose qui prend 2 paramètres. Le premier paramètre est le composant à rendre, et le deuxième paramètre, l'endroit où le rendu se fera. Dans le dossier public du projet se trouve un index.html dans lequel il n'y a qu'une div avec un id root, et c'est elle que react selectionne pour afficher l'application.
