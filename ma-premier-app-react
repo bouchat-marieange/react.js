@@ -1,0 +1,39 @@
+ma-premier-app-react
+
+/home/user/ma-premier-app-react.
+
+user@nb25:~$ create-react-app my-app-name
+
+Creating a new React app in /home/user/my-app-name.
+
+You are using Node v4.2.6 so the project will be bootstrapped with an old unsupported version of tools.
+
+Please update to Node 6 or higher for a better, fully supported experience.
+
+Installing packages. This might take a couple of minutes.
+Installing react, react-dom, and react-scripts...
+
+loadRequestedDeps → netwo ▄ ╢██████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░╟
+loadRequestedDeps → netwo ▄ ╢██████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░╟
+^C
+user@nb25:~$ create-react-app ma-premier-app-react
+
+Creating a new React app in /home/user/ma-premier-app-react.
+
+You are using Node v4.2.6 so the project will be bootstrapped with an old unsupported version of tools.
+
+Please update to Node 6 or higher for a better, fully supported experience.
+
+
+Compiled successfully!
+
+You can now view test in the browser.
+
+  Local:            http://localhost:3000/
+  On Your Network:  http://10.20.1.23:3000/
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+
+
+https://www.youtube.com/user/ZackHemsey

@@ -1,11 +1,16 @@
-import React, { Component } from 'react';// Importe la librairie react installée dans le dossier node_modules
+import React, { Component } from 'react';
 
-export default class Hello extends Component {// Création de la class Hello et export de la classe pour l'imbriquer dans d'autres composants
-  render() {// fonction dans react qui renvoie la vue
+export default class Hello extends Component {
+  render() {
     return (
-      <div className="App">// classname est la même chose que class en html mais react utilise déja le mot class donc petit changement (le comportement est le même)
-        // Hello
+      <div className="App">
+        Hello
+        <br />
         {this.props.parametre}
+        <br />
+        {this.props.image}
+        <br />
+        <img src={this.props.image} alt="bsdlifhs" />
       </div>
     );
   }

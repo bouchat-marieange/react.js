@@ -319,7 +319,7 @@ export default class Hello extends Component {
   }
 }
 ````
-Si tout va bien, sur le navigateur "Hello" devrait apparaître.
+Si tout va bien, sur le navigateur "Hello" devrait apparaître. Il faut au préalable aller dans votre dossier de travail et taper la commande npm start pour lancer le serveur et afficher le contenu de l'adresse http://localhost:3000/
 
 Ce que react permet aussi, c'est d'envoyer d'un composant à un autre des paramètres, de cette manière (toujours dans le fichier Welcome.js)
 
@@ -387,5 +387,145 @@ class App extends Component {
 
 export default App;
 ````
+
+## Code commenté avec différentes versions des fichiers
+
+**index.js**
+
+````JavaScript
+// import React from 'react'; //différent de import React, {Component} from 'react'; parce que que cette fois react n'a pas besoin de components
+// import ReactDOM from 'react-dom'; // C'est lui qui gère l'affichage dans le DOM
+// import './index.css'; // import du css (généralement c'est le seul endroit où le css doit être importer - certains codeurs place le css dircectement dans le fichiers html de chaque components ou dans des dossiers à part contenant le fichier js du component et le fichier css uniquement lié au component et portant le même nom que le components de manière à rendre chaque component totalement indépendants et réutilisable dans d'autres projets plus facilement.)
+// import Welcome from './Welcome'; // import du composant créé précédement (il n'est pas écrit Welcome.js et c'est normal, par défaut node.js le comprend, mais si l'extension est différente et n'est pas du js, il faut le préciser)
+//
+// ReactDOM.render(<Welcome />, document.getElementById('root')); // fonction pour afficher quelque chose qui prend 2 paramètres. Le premier paramètre est le composant à rendre, et le deuxième paramètre, l'endroit où le rendu se fera. Dans le dossier public du projet se trouve un index.html dans lequel il n'y a qu'une div avec un id root, et c'est elle que react selectionne pour afficher l'application.
+
+
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import Welcome from './Welcome';
+
+ReactDOM.render(<Welcome />, document.getElementById('root'));
+````
+
+
+**Hello.js**
+
+````JavaScript
+// import React, { Component } from 'react';// Importe la librairie react installée dans le dossier node_modules
+//
+// export default class Hello extends Component {// Création de la class Hello et export de la classe pour l'imbriquer dans d'autres composants
+//   render() {// fonction dans react qui renvoie la vue
+//     return (
+//       <div className="App"> // classname est la même chose que class en html mais react utilise déja le mot class donc petit changement (le comportement est le même)
+//         Hello
+//         {this.props.parametre} // On receptionne les paramètre d'un composant hello dont le contenu à été défini dans le fichier Welcome.js et dont la valeur est HelloWorld
+//       </div>
+//     );
+//   }
+// }
+
+// import React, { Component } from 'react';// Importe la librairie react installée dans le dossier node_modules
+//
+// export default class Hello extends Component { // Création de la class Hello et export de la classe pour l'imbriquer dans d'autres composants
+//   render() {// fonction dans react qui renvoie la vue
+//     return (
+//       <div className="App">
+//         Hello (ce mot se situe dans le fichier Hello.js et est affiché grâce à son importation dans Welcome.js puis son affichage gérer dans index.js)
+//         <br />
+//         {this.props.parametre} // Le paramètre qui s'appelle parametre et qui contient HelloWorld a été créer et envoyé au fichier Hello.js à partir du fichier Welcome.js)
+//         {this.props.image} // Le paramètre qui s'appelle image et qui contient url de l'image a été créer et envoyé au ficherr Hello.js à partir du ficheir Welcome.js, il affiche l'url de l'image uniquement soous forme de texte et pas l'image elle-même
+//         <img src={this.props.image} alt="bsdlifhs" /> // Pour intégré l'image sous forme d'image, il faut récupéré le paramètre image contenant l'url de l'image et le placer dans une balise html avec l'attribut alt en + pour améliorer l'accessibilité
+//       </div>
+//     );
+//   }
+// }
+
+
+import React, { Component } from 'react';
+
+export default class Hello extends Component {
+  render() {
+    return (
+      <div className="App">
+        Hello
+        <br />
+        {this.props.parametre}
+        <br />
+        {this.props.image}
+        <br />
+        <img src={this.props.image} alt="bsdlifhs" />
+      </div>
+    );
+  }
+}
+````
+
+
+**Welcome.js**
+
+````JavaScript
+// import React, { Component } from 'react'; // Importe la librairie react installée dans le dossier node_modules
+// import Hello from './Hello'; // importer le deuxième composant Hello das le premier composant welcome
+//
+// export default class Welcome extends Component {// Création de la class Welcome et export de la classe pour l'imbriquer dans d'autres composants
+//   render() { // fonction dans react qui renvoie la vue
+//     return (
+//       <div className="App"> // classname est la même chose que class en html mais react utilise déja le mot class donc petit changement (le comportement est le même)
+//         Welcome
+//         <Hello /> // On appelle le deuxième composant Hello  dans le premier composant Welcome sous la forme <Nom_Du_Composant/>
+//         // <Hello parametre={'HelloWorld'} /> // On envoie les paramètre d'un composant hello à un à autre composant Welcome
+//       </div>
+//     );
+//   }
+// }
+
+
+//Seconde version
+
+// import React, { Component } from 'react';
+// import Hello from './Hello';
+//
+// export default class Welcome extends Component {
+//   render() {
+//     return (
+//       <div className="App">
+//         Welcome (ce mot se situe dans le fichier Hello.js)
+//         <Hello parametre={'HelloWorld'} /> // ici on appelle le fichier Hello et on lui envoi un paramètre qui s'appelle parametre qui contient le texte HelloWorld
+//         <Hello image={'https://s3.amazonaws.com/owler-image/logo/bodecode-technology_owler_20160301_220443_original.png'} parametre={'HelloWorld'} />
+//         //ici on appelle Hello.js et on lui envoie plusieurs paramètres imgage (qui contient l'url d'une image) et paramètre qui continent le texte HelloWorld
+//       </div>
+//     );
+//   }
+// }
+
+import React, { Component } from 'react';
+import Hello from './Hello';
+
+export default class Welcome extends Component {
+  render() {
+    return (
+      <div className="App">
+        Welcome
+        <Hello parametre={'HelloWorld'} />
+        <Hello image={'https://s3.amazonaws.com/owler-image/logo/bodecode-technology_owler_20160301_220443_original.png'} parametre={'HelloWorld'} />
+      </div>
+    );
+  }
+}
+````
+
+**index.html (situé dans le dossier "public" du dossier de travail)**
+
+/*root fait référence à un id par defaut appliqué à la div principale du document index.html qui se trouve dans le dossier "public" du dossier de travail.*/
+#root
+{
+  font-size: Arial, sans-serif;
+  font-weight: bold;
+  font-style: italic;
+  background-color: blue;
+}
 
 Voilà maintenant que vous possédez les bases , vous êtes prêts à vous lancer dans un réel projet react !

@@ -1,0 +1,8 @@
+/*root fait référence à un id par defaut appliqué à la div principale du document index.html qui se trouve dans le dossier "public" du dossier de travail.*/
+#root
+{
+  font-size: Arial, sans-serif;
+  font-weight: bold;
+  font-style: italic;
+  background-color: blue;
+}
