@@ -966,7 +966,7 @@ Normalement en HTML on utilise la class pour donner un nom à notre élément et
 
 Le HTML que vous voyez s'appelle donc le **JSX (Javascript Extension)**. Nous allons voir en détail pourquoi React fonctionne de la sorte avec HTML.
 
-Crée un fichier Welcome.js dans le dossier "components" préalablement créer par tes soins à la racine du dossier de travail, et colle le code suivant dedans. Regarde ce qui se passe dans le navigatgeur.
+Crée un fichier Welcome.js dans le dossier "components" préalablement créer par tes soins dans le dossier src de notre projet, et colle le code suivant dedans. Regarde ce qui se passe dans le navigatgeur.
 
 Rien ne se passe dans le navigateur c'est normal ! On a créé un component mais on n'a pas dis à notre application de l'afficher. POur faire ça, on va va retourner à la base de notre component qui est App.js et appeler le component Welcome, à l'endroit où on veut qu'il s'ajoute (en quelque sorte comme un include) mais dans le render. Tout ce qui se passe dans le render sera tout ce qui s'affiche à l'écran.
 
@@ -1050,3 +1050,91 @@ import React from 'react';
 Avec ce code, on indique React que notre component est un component. Quand on ne met pas ./ avant, par defaut, l'ordinateur va chercher par defaut dans le dossier node_modules que nodeJS à installer avec la commande react-create_app et un de ces dossier s'appelle React, c'est donc là qu'il va le charger sans que l'on ai besoin de lui indiquer tout le chemin complet pour y accéder.
 
 Si tout s'est bien passé, on devrait avoir notre application qui tourne correctement avec notre tout premier component!
+
+
+## Le DOM
+
+Nous venons de d'apprendre comment créer un component et en créer un deuxième et l'imbriquer dans le premier, mais on ne sais toujours pas comment les afficher.
+
+React utilise "le virutual dom", il va simplement créer une page virtuellement et seulement l'afficher quand on lui demande.
+
+Dans index.js, on importe le component App et il y a un "ReactDOM.render(", document.getElementById('root')); qui va se charger de créer notre vue et de l'afficher à l'emplacement de l'ID root qui se trouve dans index.html (ce fichier index.html qui affichera le résulat se trouve dans le sous-dossier public de notre dossier de travail). Lorsque l'on va voir le code de index.html, on peut constater effectivement que la page se présente à peu près comme une page html standard. Cette page contient dans sa partie body une seule div qui porte l'id "root" c'est à cet endroit que se fera le rendu visuel de notre page.
+
+
+## Props et State
+Des éléments hyper importants de React sont les props (propriétés) et les states.
+
+Le prop (propriété) est un paramètre qu nous permet de faire passe des informations d'un éléments à un autre.
+
+La syntax de base pour envoyer un props:
+
+````javascript
+var valeur = 'bonjour';
+<List NomDuProps={valeur}/>
+````
+Donc on appelle le component (ici List),puis on lui passe des paramètres comme une balise en html. Ici le nom du props est "NomDuProps" et sa valeur est le conteneu de la variable valeur.
+
+Pour récupérer la valeur du props, une fois dans le component List appelé juste au dessus, n'importe où dans la class, on utilisera
+
+````javascript
+var test = this.props.NomDuProps;
+console.log(test);
+````
+
+Pour finir, dans la console, il affiche "bonjour".
+
+Pour notre application, on va créer une ToDoList. Pour ce faire, dans le component App on va ajouter un component `List` dans le dossier component. Pour l'instant voici son contenu, il n'affiche pas grand chose.
+
+N'oubliez pas de l'importer dans App.js (placer cette ligne de code après les autres imports au début de la page)
+
+````javascript
+import List from './component/List';
+````
+
+et d'importer React dans List.js (placer cette ligne en haut de la page List.js)
+
+````javascript
+import React from 'react';
+````
+
+Pour passer des valeurs d'un component à un autre, il faut simplement ajouter une ou plusieurs props:
+
+````javascript
+// Dans le render de App.js :
+<List todos={['vaiselle','cuisiner']} NomDeMaProps2={valeur2} />
+````
+
+Pour afficher les données qui sont passées d'un component à un autre, retourner dans le component List.js et modifier le code déja présent comme ceci:
+
+````javascript
+export default class List extends React.Component {
+  render() {
+    return (
+        <div className="liste">
+            {this.props.todos.length} // égale 2
+        </div>
+    );
+  }
+}
+````
+Ici nous avons afficher quelque chose de dynamique dans le render avec l'HTML. En fait cette ligne : {this.props.todos.length} va afficher la valeur 2 qui correspond à la longueur du tableau qu'on lui a envoyé à partir de app.js, car ce tableau contient 2 éléments (vaisselle ,cuisiner). Lorsque l'on veux afficher le contenu d'une variable dans le return, on utilise "{}" sinon, on peut bien sûr créer des fonctions dans notre component pour traiter les informations qui nous sont envoyées, comme ceci (toujours dans le fichier List.js):
+
+````javascript
+export default class List extends React.Component {
+  render() {
+    function test(){
+      return 'bonjour';
+    }
+    return (
+        <div className="liste">
+            {this.props.todos.length}
+            {test()}
+        </div>
+    );
+  }
+}
+````
+
+Donc les informations passées en paramètres sont accessible avec l'attribut props.
+
+Pour notre App, on n'a un component pour afficher le nombre de tâches à réaliser (todos), actuellement il n'affiche que la taille (du tableau soit 2), mais il nous faut aussi un compoent pour les créer et garder une logique de séparation des components. Appelons le dans App.
