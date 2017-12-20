@@ -529,3 +529,524 @@ export default class Welcome extends Component {
 }
 
 Voilà maintenant que vous possédez les bases , vous êtes prêts à vous lancer dans un réel projet react !
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------- En suspend le temps d'intégrer le reste de la théorie avec le Chat box -------------
+
+## Premier Site
+
+Pour ce premier projet, vous allez reproduire une onepage à l'identique de celui-ci : One page = https://html5up.net/photon
+
+L'objectif est de s'habituer à créer des components et à les imbriquerr de la bonne façon, c'est à dire de cette manière:
+
+![Imbrication component one-page](https://camo.githubusercontent.com/f0ec54d6a1c3438a9a0b5fcb29f44455289d3101/687474703a2f2f6d616b657465612e636f2e756b2f696d616765732f323031342d30332d30352d726f627573742d7765622d617070732d776974682d72656163742d706172742d312f776972656672616d655f6465636f6e73747275637465642e706e67)
+
+L'intérêt n'est pas de faire transiter des informations mais juste d'imbriquer les components. Donc nous n'allons utiliser que 5% de ce que React est capable de faire. Ne reproduisez que l'aspect graphique.
+Le principe étant de créer un grand nombre de components de les mettre dans un sous-dossier et de les appeller pour l'affichage dans leur ordre d'apparition. Il est important de bien nommé les components de manières à ce que le code soit plus facilement compréhensible.
+Le contenu html et le css peut être copier-coller directement à partir du modèle télécharger à l'adresse https://html5up.net/photon contenant le modèle
+
+A vous de jouer!
+
+Marche à suivre :
+
+1. Créer une nouvelle appli en se positionnant où on le souhaite sur son disque dur (le dossier du projet sera automatiquement créer), ouvrir le terminal à cet endroit et taper la commande
+
+````code
+create-react-app one_page
+````
+
+Lorsque cette étape est terminée, le terminal affiche ce message:
+
+````code
+Success! Created premiere_app_react at /home/user/Repo de moi/react.js/premiere_app_react
+Inside that directory, you can run several commands:
+
+  npm start
+    Starts the development server.
+
+  npm run build
+    Bundles the app into static files for production.
+
+  npm test
+    Starts the test runner.
+
+  npm run eject
+    Removes this tool and copies build dependencies, configuration files
+    and scripts into the app directory. If you do this, you can’t go back!
+
+We suggest that you begin by typing:
+
+  cd premiere_app_react
+  npm start
+
+Happy hacking!
+````
+
+On peut alors taper la commande npm start pour lancer le serveur :
+
+````code
+npm start
+````
+
+Une page à l'adresse http://localhost:3000/ s'ouvre automatiquement dans notre navigateur et le terminal affiche le message suivant:
+
+````code
+Compiled successfully!
+
+You can now view one_page in the browser.
+
+  Local:            http://localhost:3000/
+  On Your Network:  http://10.20.1.23:3000/
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+
+````
+
+Créer un dossier "components" à la racine du dossier de travail pour contenir tout les composants.js de la page et les fichiers.c
+ss portant le même nom que les composants.js et liés à eux.
+
+Faire une maquette papier du site d'exemple pour définir tous les composants, leur donner un nom explicite et voir de quel manière ils sont imbriqués les uns dans les autres.
+
+Créer dans le dossier components les différents components que l'on a définis et les fichiers css correspondant. Placer à l'interieur par copier coller le contenu html que l'on reprend dans le dossier zip télécharger depuis l'exemple de la page.
+
+Ajouter le code nécessaire pour importer et exporter les components dans index.js et voir comment faire pour liés les css des différents components(est-ce que cela passe par des link dans index.css  ou est-ce qu'il faut linker chaque css au composant et l'import du css se fait en même temps que l'import du composant dans index.js)
+
+Placer tout le code nécessaire dans index.js pour qu'il puisse générer le fichier index.html qui se trouve dans le dossier "public" du dossier de travail.
+
+Lancer npm start pour vérifier le contenu, ajuster et corriger les éventuelles erreurs.
+
+
+
+## SASS (en suspend pour l'instant - notes ok à mettre en pratique)
+
+Il est bien sure possible de faire du Sass avec React mais pour faire ça, il va falloir faire quelques manipulation:
+
+Dans une application React fonctionnel, se positionner avec le terminal dans l'appli et taper les commandes suivantes:
+
+````code
+cd your-app
+mkdir src/Assets
+````
+
+````code
+npm install node-sass --save
+npm install npm-run-all --save
+````
+
+* Créer un fichier style.css dans le dossier Assets qui est dans le dossier src
+* Modifier le package.json manuelement:
+
+````json
+"scripts": {
+    "build-css": "node-sass src/Assets/style.scss -o src/Assets/",
+    "watch-css": "npm run build-css && node-sass src/Assets/style.scss -o src/Assets/ --watch --recursive",
+    "start-js": "react-scripts start",
+    "start": "npm-run-all -p watch-css start-js",
+    "build": "npm run build-css && react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+}
+````
+
+Une fois les modifications apportées, il va fallooir aussi modifier le fichier css que react va chercher (normalement dans index.js) et modifier l'import "import './App.css';" par "import './Assets/style.css';"  Supprimer le  "import './App.css';" dans le App.js
+
+Si tout est fais correctement, maintenant vous pouvez faire du Sass dans votre projet react !
+
+
+
+
+
+--------------------- En suspend à poursuivre après avoir pris connaissance du reste de la théorie -------------------
+
+# Projet
+
+## Installation
+
+Pour travailler en React, nous allons avoir besoin d'un environnement de travail principalement basé sur Node.js. S'il n'est pas déjà installé, go on the terminal
+
+````code
+sudo apt-get update
+sudo apt-get install nodejs npm
+````
+
+## Create React App
+
+* Crée un dossier de travail pour React dans lequel on mettra tous les projets.
+* Installe et crée ton projet React avec le terminal.
+
+Enfin utilise la commande "create-react-app" en global. Cette commande est là pour créer le squelette de notre application, on pourrait très bien le faire à la main mais c'est une perte de temps.
+
+````code
+npm install -g create-react-app
+````
+
+
+
+
+
+
+
+
+------------------------- En suspend le temps d'intégrer le reste de la théorie avec le Chat box -------------
+
+## Premier Site
+
+Pour ce premier projet, vous allez reproduire une onepage à l'identique de celui-ci : One page = https://html5up.net/photon
+
+L'objectif est de s'habituer à créer des components et à les imbriquerr de la bonne façon, c'est à dire de cette manière:
+
+![Imbrication component one-page](https://camo.githubusercontent.com/f0ec54d6a1c3438a9a0b5fcb29f44455289d3101/687474703a2f2f6d616b657465612e636f2e756b2f696d616765732f323031342d30332d30352d726f627573742d7765622d617070732d776974682d72656163742d706172742d312f776972656672616d655f6465636f6e73747275637465642e706e67)
+
+L'intérêt n'est pas de faire transiter des informations mais juste d'imbriquer les components. Donc nous n'allons utiliser que 5% de ce que React est capable de faire. Ne reproduisez que l'aspect graphique.
+Le principe étant de créer un grand nombre de components de les mettre dans un sous-dossier et de les appeller pour l'affichage dans leur ordre d'apparition. Il est important de bien nommé les components de manières à ce que le code soit plus facilement compréhensible.
+Le contenu html et le css peut être copier-coller directement à partir du modèle télécharger à l'adresse https://html5up.net/photon contenant le modèle
+
+A vous de jouer!
+
+Marche à suivre :
+
+1. Créer une nouvelle appli en se positionnant où on le souhaite sur son disque dur (le dossier du projet sera automatiquement créer), ouvrir le terminal à cet endroit et taper la commande
+
+````code
+create-react-app one_page
+````
+
+Lorsque cette étape est terminée, le terminal affiche ce message:
+
+````code
+Success! Created premiere_app_react at /home/user/Repo de moi/react.js/premiere_app_react
+Inside that directory, you can run several commands:
+
+  npm start
+    Starts the development server.
+
+  npm run build
+    Bundles the app into static files for production.
+
+  npm test
+    Starts the test runner.
+
+  npm run eject
+    Removes this tool and copies build dependencies, configuration files
+    and scripts into the app directory. If you do this, you can’t go back!
+
+We suggest that you begin by typing:
+
+  cd premiere_app_react
+  npm start
+
+Happy hacking!
+````
+
+On peut alors taper la commande npm start pour lancer le serveur :
+
+````code
+npm start
+````
+
+Une page à l'adresse http://localhost:3000/ s'ouvre automatiquement dans notre navigateur et le terminal affiche le message suivant:
+
+````code
+Compiled successfully!
+
+You can now view one_page in the browser.
+
+  Local:            http://localhost:3000/
+  On Your Network:  http://10.20.1.23:3000/
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+
+````
+
+Créer un dossier "components" à la racine du dossier de travail pour contenir tout les composants.js de la page et les fichiers.c
+ss portant le même nom que les composants.js et liés à eux.
+
+Faire une maquette papier du site d'exemple pour définir tous les composants, leur donner un nom explicite et voir de quel manière ils sont imbriqués les uns dans les autres.
+
+Créer dans le dossier components les différents components que l'on a définis et les fichiers css correspondant. Placer à l'interieur par copier coller le contenu html que l'on reprend dans le dossier zip télécharger depuis l'exemple de la page.
+
+Ajouter le code nécessaire pour importer et exporter les components dans index.js et voir comment faire pour liés les css des différents components(est-ce que cela passe par des link dans index.css  ou est-ce qu'il faut linker chaque css au composant et l'import du css se fait en même temps que l'import du composant dans index.js)
+
+Placer tout le code nécessaire dans index.js pour qu'il puisse générer le fichier index.html qui se trouve dans le dossier "public" du dossier de travail.
+
+Lancer npm start pour vérifier le contenu, ajuster et corriger les éventuelles erreurs.
+
+
+
+## SASS (en suspend pour l'instant - notes ok à mettre en pratique)
+
+Il est bien sure possible de faire du Sass avec React mais pour faire ça, il va falloir faire quelques manipulation:
+
+Dans une application React fonctionnel, se positionner avec le terminal dans l'appli et taper les commandes suivantes:
+
+````code
+cd your-app
+mkdir src/Assets
+````
+
+````code
+npm install node-sass --save
+npm install npm-run-all --save
+````
+
+* Créer un fichier style.css dans le dossier Assets qui est dans le dossier src
+* Modifier le package.json manuelement:
+
+````json
+"scripts": {
+    "build-css": "node-sass src/Assets/style.scss -o src/Assets/",
+    "watch-css": "npm run build-css && node-sass src/Assets/style.scss -o src/Assets/ --watch --recursive",
+    "start-js": "react-scripts start",
+    "start": "npm-run-all -p watch-css start-js",
+    "build": "npm run build-css && react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+}
+````
+
+Une fois les modifications apportées, il va fallooir aussi modifier le fichier css que react va chercher (normalement dans index.js) et modifier l'import "import './App.css';" par "import './Assets/style.css';"  Supprimer le  "import './App.css';" dans le App.js
+
+Si tout est fais correctement, maintenant vous pouvez faire du Sass dans votre projet react !
+
+
+
+
+
+--------------------- En suspend à poursuivre après avoir pris connaissance du reste de la théorie -------------------
+
+# Projet
+
+## Installation
+
+Pour travailler en React, nous allons avoir besoin d'un environnement de travail principalement basé sur Node.js. S'il n'est pas déjà installé, go on the terminal
+
+````code
+sudo apt-get update
+sudo apt-get install nodejs npm
+````
+
+## Create React App
+
+* Crée un dossier de travail pour React dans lequel on mettra tous les projets.
+* Installe et crée ton projet React avec le terminal.
+
+Enfin utilise la commande "create-react-app" en global. Cette commande est là pour créer le squelette de notre application, on pourrait très bien le faire à la main mais c'est une perte de temps.
+
+````code
+npm install -g create-react-app
+````
+
+Le terminal affiche le texte suivant lorsque l'opération est terminée:
+
+````code
+user@nb25:~/Desktop/Repo de moi/React.js/seconde_app$ create-react-app serie
+
+Creating a new React app in /home/user/Repo de moi/React.js/seconde_app/serie.
+
+Installing packages. This might take a couple of minutes.
+Installing react, react-dom, and react-scripts...
+
+
+> uglifyjs-webpack-plugin@0.4.6 postinstall /home/user/Repo de moi/React.js/seconde_app/serie/node_modules/uglifyjs-webpack-plugin
+> node lib/post_install.js
+
++ react-dom@16.2.0
++ react-scripts@1.0.17
++ react@16.2.0
+added 1151 packages in 99.431s
+
+Success! Created serie at /home/user/Repo de moi/React.js/seconde_app/serie
+Inside that directory, you can run several commands:
+
+  npm start
+    Starts the development server.
+
+  npm run build
+    Bundles the app into static files for production.
+
+  npm test
+    Starts the test runner.
+
+  npm run eject
+    Removes this tool and copies build dependencies, configuration files
+    and scripts into the app directory. If you do this, you can’t go back!
+
+We suggest that you begin by typing:
+
+  cd serie
+  npm start
+
+Happy hacking!
+````
+
+Se placer à l'intérieur du dossier en tapant la commande (cd serie) pour se placer dans le dossier puis npm start pour lancer react et ouvrir un nouvel onglet de visualisation dans le navigateur à l'adresse http://localhost:3000/
+
+````code
+cd serie
+npm start
+````
+
+On peut aussi taper cd serie (serie est nom du dossier) qui permet de positionner dans le dossier et puis la commande suivante.
+
+````code
+npm start
+````
+
+Le terminal affiche le texte suivant à la fin de l'opération
+
+````code
+Compiled successfully!
+
+You can now view serie in the browser.
+
+  Local:            http://localhost:3000/
+  On Your Network:  http://10.20.1.23:3000/
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+
+````
+
+Et ouvre un nouvel onglet dans le navigateur par default à l'adresse http://localhost:3000/ qui affiche une page basique contenant:  le logo de react, et le texte "Welcom to React - To get started, edit src/App.js and save to reload." Cette page basique c'est notre application. npm start met en place un système de livereloading pour qu'à chaque fois qu'on sauve un fichier, l'appli se mette à jour sans devoir recharger la page.
+
+Pour tester, modifie la ligne "Welcome To react" dans App.js (qui se trouve dans le dossier src) par un autre titre puis vérifie dans le navigateur que tout ce change automatiquement sans refresh.
+
+## Introduction
+
+React est une view library crée par Facebook et Instagram. React se limite à modifier la vue et utilise principalemenent un système avec des components.
+
+### Qu'est-ce qu'un component?
+
+Un component n'est qu'un pbout de code qui peut être un simple bouton ou même toute une application
+
+![React](https://camo.githubusercontent.com/50b2ebe0697dc0b78d4c81a711c3ee394377f20f/687474703a2f2f6e697472616a6b612e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031362f30382f75696d6f636b7363726970742e706e67)
+
+Dans l'image ci-dessus, on peut voir les différents components de notre application, qui va du simple EmployeeList jusqu'à L'app.
+
+Donc dans cette interface de gestion professionnelle qui est à la fois, sur la gauche un component avec un bouton, un header et une liste dont chaque élément est un component. Mais on peut encore décomposer la liste d'meployé avec le componenet EmployeeListItem qui contient trois components: Profil Photo, Profil nom, Profil post. On va voir avec React comment on eut partir de petit component tout simple pour en faire une interface complète.
+
+React n'est aps le seul dans sa categorie, et d'autres font parfois beaucoup plus que lui. Par exemple Angular ou Backbone qui sont de "vrais" framework MVC. Il y a aussi le nouvel ELM.
+
+## Créer un composant React
+
+Réact permet de créer des views de manière dynamique plutôt que statique.
+
+Pour notre premier composant, on va créer une class:
+
+````Javascript
+class Welcome extends React.Component {
+  render() {
+    return <h1>Hello</h1>;
+  }
+}
+````
+
+Nous avons là notre premier component React qui est en fait un objet, qui implémente la méthode render, et retourne quelque chose qui ressemble à du du HTML mais qui ne l'est pas.
+
+Normalement en HTML on utilise la class pour donner un nom à notre élément et pour pouvoir le selectionner. Ici on utilisera dans le HTML non pas **class** mais **className**, parce que React utilise déja Class. Donc pour ne pas confondre, utilise className lorsque tu veux faire du HTML dans une class React (de toute façon si ce n'est aps le cas àa te fera une bonne grosse erreur !).
+
+Le HTML que vous voyez s'appelle donc le **JSX (Javascript Extension)**. Nous allons voir en détail pourquoi React fonctionne de la sorte avec HTML.
+
+Crée un fichier Welcome.js dans le dossier "components" préalablement créer par tes soins à la racine du dossier de travail, et colle le code suivant dedans. Regarde ce qui se passe dans le navigatgeur.
+
+Rien ne se passe dans le navigateur c'est normal ! On a créé un component mais on n'a pas dis à notre application de l'afficher. POur faire ça, on va va retourner à la base de notre component qui est App.js et appeler le component Welcome, à l'endroit où on veut qu'il s'ajoute (en quelque sorte comme un include) mais dans le render. Tout ce qui se passe dans le render sera tout ce qui s'affiche à l'écran.
+
+
+Il y a quelques règles de base à retenir pour mettre un component dans notre vue:
+
+* Un component doit toujours contenir une methode render dans laquelle se trouve un return
+* Dans le return, on met le **JSX** mais il ne peut y avaoir qu'une seule div principale. C'est à dire qu'il y a une seule div qui contient et englobe obligatoiremement toutes les autres divs sinon ça ne fonctionne pas.
+
+Exemple:
+
+Ceci est la bonne façon de faire
+
+````javascript
+<div className="main">
+
+  <div className="container">
+  bonjour
+  </div>
+
+  <div className="container">
+  Aurevoir
+  </div>
+
+</div>
+````
+
+Ceci est la mauvaise façon de faire
+
+````javascript
+<div className="main">
+bonjour
+</div>
+
+<div className="container">
+Aurevoir
+</div>
+````
+
+* Il faut aussi que l'on importe notre componant dans le fichier où l'on veut qu'il apparaisse
+* Il faut qu'on exporte le component qu'on doit afficher
+
+Donc, dans App.js on ajoute (importer notre component dans le fichier où l'on veut qu'il apparaisse)
+
+````javascript
+    import Welcome from './component/Welcome';// On importe notre class "Welcome" de ./ (dans le même dossier) - React comprend que c'est du JS (inutile de d'indiquer Welcome.js, par contre si c'est un autre langage, il faut lui préciser)
+````
+
+En français, on importe notre class "Welcome" -> de  -> ./ (dans le même dossier) -> Welcome (ce qui revient à dire Welcome.js, mais React comprend que c'est du js sans que l'on doivent lui indiquer, par contre si le fichier est dans un autre langage, il faut lui préciser)
+
+Si on ajoute le import, ça fait une erreur de moins mais il nous en reste encore 2 à résoudre.
+
+Dans Welcome.js, il faut qu'on lui dise qu'on veut exporter. Il y a 2 manière de faire:
+
+````javascript
+class Welcome extends React.Component {
+    render() {
+      return <h1>Hello</h1>;
+    }
+}
+
+export default Welcome;
+````
+
+ou
+
+````javascript
+export default class Welcome extends React.Component {
+    render() {
+      return <h1>Hello</h1>;
+    }
+}
+````
+
+Et là, il ne nous reste plus qu'une seule étape à réaliser, c'est de dire à notre projet que notre component est un component en ajoutant tout au début du fichier Welcomee.js le code suivant:
+
+````javascript
+import React from 'react';
+````
+
+Avec ce code, on indique React que notre component est un component. Quand on ne met pas ./ avant, par defaut, l'ordinateur va chercher par defaut dans le dossier node_modules que nodeJS à installer avec la commande react-create_app et un de ces dossier s'appelle React, c'est donc là qu'il va le charger sans que l'on ai besoin de lui indiquer tout le chemin complet pour y accéder.
+
+Si tout s'est bien passé, on devrait avoir notre application qui tourne correctement avec notre tout premier component!
