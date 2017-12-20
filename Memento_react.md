@@ -1074,6 +1074,13 @@ var valeur = 'bonjour';
 ````
 Donc on appelle le component (ici List),puis on lui passe des paramètres comme une balise en html. Ici le nom du props est "NomDuProps" et sa valeur est le conteneu de la variable valeur.
 
+Ce qui dans le code se traduira par exemple par:
+
+````javascript
+var valeur = 'bonjour';
+<List todos={valeur}/>
+````
+
 Pour récupérer la valeur du props, une fois dans le component List appelé juste au dessus, n'importe où dans la class, on utilisera
 
 ````javascript
@@ -1103,6 +1110,13 @@ Pour passer des valeurs d'un component à un autre, il faut simplement ajouter u
 // Dans le render de App.js :
 <List todos={['vaiselle','cuisiner']} NomDeMaProps2={valeur2} />
 ````
+
+Ce qui se traduira dans le code par:
+````javascript
+// Dans le render de App.js :
+<List todos={['vaiselle','cuisiner']} />
+````
+
 
 Pour afficher les données qui sont passées d'un component à un autre, retourner dans le component List.js et modifier le code déja présent comme ceci:
 
@@ -1134,6 +1148,76 @@ export default class List extends React.Component {
   }
 }
 ````
+
+**Code complet et corrigé de List.js:**
+
+````javascript
+import React from 'react';
+
+export default class List extends React.Component {
+  test(){
+    return this.props.todos[1];
+  }
+
+  render() {
+    return (
+        <div className="liste">
+            {this.props.todos.length}
+            <br/>
+            {this.test()}
+        </div>
+    );
+  }
+}
+````
+
+**Code complet et corrigé de Welcome.js:**
+
+````javascript
+// On indique React que notre component est un component. Quand on ne met pas ./ avant, par defaut, l'ordinateur va chercher par defaut dans le dossier node_modules que nodeJS à installer avec la commande react-create_app et un de ces dossier s'appelle React, c'est donc là qu'il va le charger sans que l'on ai besoin de lui indiquer tout le chemin d'accès.
+import React from 'react';
+
+export default class Welcome extends React.Component {
+    render() {
+      return <h1>Hello</h1>;
+    }
+}
+````
+
+**Code complet et corrigé de App.js:**
+
+````javascript
+import React, { Component } from 'react';
+import logo from './logo.svg';
+import './App.css';
+import Welcome from './component/Welcome';
+import List from './component/List';
+
+class App extends Component {
+  render() {
+    var valeur = 'bonjour';
+    return (
+      // Attention une seule div principale
+      <div className="App">
+        <header className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+          <h1 className="App-title">Bienvenue dans mon application</h1>
+        </header>
+        <p className="App-intro">
+          To get started, edit <code>src/App.js</code> and save to reload.
+        </p>
+        <Welcome/>
+
+        <List todos={['vaiselle','cuisiner']} />
+
+      </div>
+    );
+  }
+}
+
+export default App;
+````
+
 
 Donc les informations passées en paramètres sont accessible avec l'attribut props.
 

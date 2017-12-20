@@ -6,6 +6,7 @@ import List from './component/List';
 
 class App extends Component {
   render() {
+    var valeur = 'bonjour';
     return (
       // Attention une seule div principale
       <div className="App">
@@ -18,15 +19,7 @@ class App extends Component {
         </p>
         <Welcome/>
 
-        {/* var valeur = 'bonjour';
-        <List NomDuProps={valeur}/>
-        var test = this.props.NomDuProps;
-        console.log(test); */}
-
-
-        var valeur2 = 'Salut';
-        <List todos={['vaiselle','cuisiner']} NomDeMaProps2={valeur2} />
-
+        <List todos={['vaiselle','cuisiner']} />
 
       </div>
     );

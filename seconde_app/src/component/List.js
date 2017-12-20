@@ -1,14 +1,16 @@
 import React from 'react';
 
 export default class List extends React.Component {
+  test(){
+    return this.props.todos[1];
+  }
+
   render() {
-    function test(){
-      return 'bonjour';
-    }
     return (
         <div className="liste">
             {this.props.todos.length}
-            {test()}
+            <br/>
+            {this.test()}
         </div>
     );
   }
