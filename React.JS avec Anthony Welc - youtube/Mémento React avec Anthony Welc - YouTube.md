@@ -119,4 +119,248 @@ Voilà la mise en forme contenue dans le fichier index.css a été appliquée et
 
 2. Dans la partie précédente, on a créer un bouton indiquant "Une autre citation", le but maintenant est d'afficher une autre citation parmis celle contenues dans le fichier citations.js de notre projet.
 
-3. Dans le fichier citations.js, chaque citation se présente de la même manière: 1 clef unique (citation1, citation2, citation3, ...) et à l'intérieur de chaque citation, il y a auteur: nom de l'auteur, et citation: contenu de la citation. On peut tout a fait ajouter d'autres citations à la suite de celles-ci pourvu qu'elle respecte la même syntaxe. 
+3. Dans le fichier citations.js, chaque citation se présente de la même manière: 1 clef unique (citation1, citation2, citation3, ...) et à l'intérieur de chaque citation, il y a auteur: nom de l'auteur, et citation: contenu de la citation. On peut tout a fait ajouter d'autres citations à la suite de celles-ci pourvu qu'elle respecte la même syntaxe. Il s'agit juste d'un gros objet javascript.
+
+4. On va donc maintenant devoir importer tout ce gros fichier objet dans React. Pour faire cela, on va dans notre fichier index.js et on va faire un import en ajoutant la ligne suivante avec les autres imports en haut de la page.
+
+``` Javascript
+import citations from './citations';// On importe le fichier citation à partir de son emplacement par rapport au fichier index.js donc ./ puisque dans le même dossier, suivi du nom de fichier sans son extension puisqu'il s'agit d'un fichier js automatiquement reconnu par React.
+```
+
+5. Si maintenant on essaie de faire un console.log dans le render, on va avoir un message d'erreur du type: 'citations' is definied but nerver used'. Cela signifie que le fichier citations.js a bien été importé mais n'a pas été utilisé. En gros l'ordinateur nous demande pourquoi on a importer quelque chose si c'est pour ne pas l'utilisé et nous signale donc un potentiel problème ou un oubli de notre part.
+Si à ce stade on va dans l'onglet "Console" du dev tools de Chrome (F12) on a un bien toute une serie d'objet correspondant chacun à une citation avec une clef unique, un auteur et un contenu.
+
+```
+{citation1: {…}, citation2: {…}, citation3: {…}, citation4: {…}, citation5: {…}, …}
+citation1
+:
+{auteur: "Henry David Thoreau", citation: "Si je suis venu au monde, ce n’est pas pour le tra…un lieu où il fasse bon vivre, mais pour y vivre."}
+citation2
+:
+{auteur: "Henry David Thoreau", citation: "L’élite n’est, matériellement, ni plus avisée ni meilleure que la masse."}
+citation3
+:
+{auteur: "Henry David Thoreau", citation: "En tuant le temps, on blesse l’éternité."}
+citation4
+:
+{auteur: "Henry David Thoreau", citation: "On rougit d’abord de son crime et puis on s’y habitue."}
+citation5
+:
+{auteur: "Henry David Thoreau", citation: "Tu dois vivre dans le présent, te lancer au-devant…que vague, trouver ton éternité à chaque instant."}
+citation6
+:
+{auteur: "Ayn Rand", citation: "Ce que tu veux peut t'appartenir, mais tu dois l'accepter, y adhérer de toute ton âme."}
+citation7
+:
+{auteur: "Ayn Rand", citation: "Une plante peut obtenir sa nourriture du sol dans …chasser pour l’obtenir. L’homme doit la produire."}
+citation8
+:
+{auteur: "Ayn Rand", citation: "Nous sommes tous frères sous la peau et j'aimerais écorcher l'humanité pour le prouver."}
+citation9
+:
+{auteur: "Ayn Rand", citation: "Le bonheur indique la réussite et la vie, la souff… un signal d’avertissement de défaite et de mort."}
+citation10
+:
+{auteur: "Ayn Rand", citation: "L’homme doit vivre pour son propre intérêt, ne sac…re bonheur est le plus haut but moral de l’homme."}
+__proto__
+:
+Object
+```
+
+6. On peut maintenant supprimer le control.log que l'on venait de créer pour test et on va stocker tout cela dans un states. Le state cela est en gros toutes les données relatives à notre component. Donc notre component App va contenir plusieurs données dont les citations.
+
+7. Pour créer un State, se placer de préférence (mais ce n'est pas obligatoire) juste sous la ligne de définition du component App avant le render. On va créer un state qui est un Object et à cet objet, on va lui passer le citations que l'on vient d'importer en haut de la page. Ce citations que l'on vient d'importer on peut l'utiliser directement comme une variable.
+
+``` Javascript
+state = {
+  citations
+};
+```
+A l'affichage, rien ne change mais par contre si on va voir dans le dev tools dans l'onglet React, on peut voir que la partie props affiche "Empty object" et la partie State par contre afffiche
+```
+State
+citations:{…}
+citation1:{…}
+  auteur: "Henry David Thoreau"
+  citation:"Si je suis venu au monde, ce n’est pas pour le transformer en un lieu où il fasse bon vivre, mais pour y vivre."
+etc ...
+```
+On ab bien donc comme un gros objet et tout ce dont on a besoin dans notre App. Maintenant, on va apprendre comment accéder à ces données-là.
+
+8. Si maintenant à l'intérieur de mon jsx (la partie du code qui ressemble à du html) on indique entre accolades (car en jsx on peut mettre directemetn du code javascript juste entre accolades) à l'intérieur des balises <p>, on va récupérer les objets states grâce au code suivant:
+
+``` Javascript
+render() {
+  return (
+    // Il est indispensable que la totalité de notre code html soit contenue dans une div globale car sinon on aura une erreur car la totalité du contenu html sera importé impérativement dans la div globale portant id "root" dans le fichier index.html
+    <div>
+      <p>
+        {/* On récupére le contenu citation qui se trouve dans citation1 qui se trouve dans citations qui se trouve dans le state */}
+        {this.state.citations.citation1.citation}
+        {/* On récupére le contenu auteur qui se trouve dans citation1 qui se trouve dans citations qui se trouve dans le state */}
+        <span>- {this.state.citations.citation1.auteur}</span>
+      </p>
+      <button>Une autre citation !</button>
+    </div>
+    )
+}
+}
+```
+Attention en jsx pour indiqué un commentaire on utilise la syntaxe suivante{/*commentaire*/}
+
+9. Le problème c'est qu'avec ce code on a bien récupéré la citation et l'auteur dans le fichier citation, mais le bouton ne fonctionne toujours pas et c'est toujours la citation1 et son auteur qui vont s'afficher et pas une citation-auteur aléatoire lorsque l'on click sur le bouton "Une autre citation!".
+
+10. Pour afficher une citation de manière aléatoire, on va devoir créer une fonction qui va aller chercher de manière aléatoire une citation et son auteur dans la liste des citations contenue dans le fichier citations.js. La fonction va ensuite selectionner une des citations uniquement et la placer dans notre state et c'est donc cette citation récupérée dans notre state. Et donc quand on affichera notre state, ce sera la citation selectionnée qui sera affichée. Notre state sera mis à jour à chaque fois que l'on appuyera sur le bouton "Une autre citation" se sera une nouvelle citation aléatoire qui sera affichée.
+
+11. Pour faire cela, première chose à faire, on importe plus directement notre state, on va créer un state pour l'instant qui est vide et que l'on va remplir.
+```
+state = {};
+```
+Si on tente de voir ce que cela donne on va avoir une erreur qui nous indique qu'il ne trouve pas lire la citation1, mais nous allons corriger cela avec une fonction.
+
+12. On va à présente s'occuper de notre bouton. Pour appleler un évènement au click sur un bouton on indique onClick, ensuite on veut indiquer du javascript donc on va mettre le code qui suit entre accolades. On va appeler un event e => , puis on va envoyer une fonction que l'on va appeller this. genererCitation(e) avec en paramètre notre évent (au click sur bouton)
+. On utilise this car la fonction on va la générer à l'intérieur même de notre class. On lui dit tu va chercher à l'intérieur de notre class la fonction qui s'appelle genererCitation
+
+```
+<button onClick={e => this.genererCitation(e)}</button>
+```
+Remarque pour l'instant on va remplacer le code
+
+``` javascript
+{this.state.citations.citation1.citation}
+<span>- {this.state.citations.citation1.auteur}</span>
+```
+par
+
+```
+texte
+<span>- texte</span>
+```
+pour éviter les erreurs lors de l'affichage à chaque fois en attendant d'avoir coder entièrement la fonction pour afficher aléatoirement les citations.
+
+13. On va a présent coder notre fonction "genererCitation". Juste sous la première ligne de création du component on va indiquer le code suivant:
+
+``` javascript
+
+```
+On va faire 3 choses dans notre fonction:
+
+* On va convertir tout notre objets citations en array dans laquelle on va récupérer chacune des clefs (citation1, citation2, citation3, ...). Donc juste un array avec toutes ces clefs ce qui va nous permettre d'en selectionner une au hasard parmi toutes ces clefs puis d'afficher la citation et l'auteur correspondant.On commence par créer une constante keyArray = Object.keys(citations), ce qui dit en gros stoque dans la constante keyArray sous forme de tableau toutes les keys de l'objet citations.Pour faire cela on utilise le code suivant:
+
+``` javascript
+class App extends React.Component {
+
+  state = {};
+
+  genererCitation = event => {
+    // On  transforme citations en Array et on récupère toutes les clefs de cet objet qui sont stockée dans la constante keyArray
+    const keyArray = Object.keys(citations);
+    console.log(keyArray); // Test qui permet à chaque click sur le bouton d'afficher le tableau reprenant les clefs du tableau citations
+  };
+
+  render() {
+    return (
+      // Il est indispensable que la totalité de notre code html soit contenue dans une div globale car sinon on aura une erreur car la totalité du contenu html sera importé impérativement dans la div globale portant id "root" dans le fichier index.html
+      <div>
+        <p>
+          texte
+          <span>- texte</span>
+        </p>
+        {/* Ici le e est une écriture abrégée pour dire event */}
+        <button onClick={e => this.genererCitation(e)}>Une autre citation !</button>
+      </div>
+      )
+  }
+}
+```
+
+Quand on teste le code en cliquant sur le bouton. A chaque fois que l'on clique sur le bouton, on peut voir dans l'onglet console du dev tools de Chrome (F12) le code suivant qui s'affiche et qui est effectivement un tableau qui reprend toutes les clefs de l'objet citations précéder entre parenthèse du nombre d'élément du tableau (10)
+
+```
+(10) ["citation1", "citation2", "citation3", "citation4", "citation5", "citation6", "citation7", "citation8", "citation9", "citation10"]
+```
+
+* La seconde chose que cette fonction va faire c'est selectionner une citation au hasard parmis toutes celles contenues dans l'objet citations et plus précisément choisir une clef au hasard dans le tableau stocké dans la constant keyArray qui reprend toutes les clefs du tableau citations.
+Voici le code:
+
+``` javascript
+genererCitation = event => {
+  // On  transforme citations en Array et on récupère toutes les clefs de cet objet qui sont stockée dans la constante keyArray
+  const keyArray = Object.keys(citations);
+  console.log(keyArray); // Test qui permet à chaque click sur le bouton d'afficher le tableau reprenant les clefs du tableau citations
+  // Un citation au hasard en utilisant la fonction floor (arrondir) et Math.random pour générer un nombre aléatoire * la longueur du tableau (array.length)
+  const randomKey = keyArray[Math.floor(Math.random() * keyArray.length)];
+  console.log(randomKey); //Test pour voir si à chaque clique de bouton, dans l'onglet console du dev tools de chrome, il affiche bien une clef de citation différente et alétoire à chaque click sur le bouton. Exemple citation 8, citation 4, citation 10 etc...
+};
+```
+
+* La troisième chose que cette fonction va faire c'est de remplir le state qui jusque là était rester vide. On va donc dans le state, lui passer l'objet citation mais cette fois en lui demandant de n'afficher que la citation dont l'index a été générer aléatoirement dans l'opération que l'on a effectué juste avant.
+
+```javascript
+genererCitation = event => {
+  // On  transforme citations en Array et on récupère toutes les clefs de cet objet qui sont stockée dans la constante keyArray
+  const keyArray = Object.keys(citations);
+  console.log(keyArray); // Test qui permet à chaque click sur le bouton d'afficher le tableau reprenant les clefs du tableau citations
+  // Un citation au hasard en utilisant la fonction floor (arrondir) et Math.random pour générer un nombre aléatoire * la longueur du tableau (array.length)
+  const randomKey = keyArray[Math.floor(Math.random() * keyArray.length)];
+  console.log(randomKey); //Test pour voir si à chaque clique de bouton, dans l'onglet console du dev tools de chrome, il affiche bien une clef de citation différente et alétoire à chaque click sur le bouton. Exemple citation 8, citation 4, citation 10 etc...
+  this.setState(citations[randomKey]); // On définit notre State qui était rester vide jusqu'ici en le générant aléatoirement en fonction de la clef aléatoire qui aura été choisie.
+};
+```
+
+A ce stade, vu qu'on n'a pas fait de console.log, on ne voit rien se modifier par contre si on va dans l'ongle React du dev tools de Chrome on peut voir qu'à chaque nouveau click sur le bouton, c'est un nouveau state différent qui est créé contenant un auteur et une citation. Notre fonction fait donc exactement ce que nous souhaitions, elle génère un autre state en fonction d'une citation choisie au hasard dans la liste des citations contenue dans la fichier citations.js.
+
+Pour obtenir l'affichage dans la page, on va reprendre en les modifiant légèrement les lignes que l'on avait enlever du code jsx tout à l'heure pour éviter des erreurs tant que la fonction n'était pas entièrement codée.
+
+Voici donc le code complet de index.js à ce stade du développement:
+
+``` javascript
+import React from 'react'; // On importe React
+import { render } from 'react-dom'; // On importe ReactDom pour le rendu, l'affichage de la page
+import citations from './citations';// On importe le fichier citation à partir de son emplacement par rapport au fichier index.js donc ./ puisque dans le même dossier, suivi du nom de fichier sans son extension automatiquement reconnu par React
+import './index.css'; // On importe la feuille de style lié au component
+
+class App extends React.Component {
+
+  state = {};
+
+  genererCitation = event => {
+    // On  transforme citations en Array et on récupère toutes les clefs de cet objet qui sont stockée dans la constante keyArray
+    const keyArray = Object.keys(citations);
+    console.log(keyArray); // Test qui permet à chaque click sur le bouton d'afficher le tableau reprenant les clefs du tableau citations
+    // Un citation au hasard en utilisant la fonction floor (arrondir) et Math.random pour générer un nombre aléatoire * la longueur du tableau (array.length)
+    const randomKey = keyArray[Math.floor(Math.random() * keyArray.length)];
+    console.log(randomKey); //Test pour voir si à chaque clique de bouton, dans l'onglet console du dev tools de chrome, il affiche bien une clef de citation différente et alétoire à chaque click sur le bouton. Exemple citation 8, citation 4, citation 10 etc...
+    this.setState(citations[randomKey]); // On définit notre State qui était rester vide jusqu'ici en le générant aléatoirement en fonction de la clef aléatoire qui aura été choisie.
+  };
+
+  render() {
+    return (
+      // Il est indispensable que la totalité de notre code html soit contenue dans une div globale car sinon on aura une erreur car la totalité du contenu html sera importé impérativement dans la div globale portant id "root" dans le fichier index.html
+      <div>
+        <p>
+          {/* On récupére le contenu du state citation+ auteur qui ne contient plus qu'une seule citation définie au hasard en fonction de sa clef (citation1, citation2, ...) stocké dans un tableau par notre fonction gerenerCitation */}
+          {this.state.citation}
+          <span>- {this.state.auteur}</span>
+        </p>
+        {/* Ici le e est une écriture abrégée pour dire event */}
+        <button onClick={e => this.genererCitation(e)}>Une autre citation !</button>
+      </div>
+      )
+  }
+}
+
+//On réalise le rendu du component App créé juste au dessus
+render(
+  <App />, // On va cherche notre component
+  document.getElementById('root') // On indique où on veut qu'il soit afficher dans index.html
+  );
+```
+
+Il nous reste cependant encore 2 problèmes à régler à ce stade. Le fait qu'il est possible que aléatoirement, la même citation puisse être choisie aléatoirement 2 fois de suite et donc ne pas modifier l'affichage malgrès l'appui sur le bouton par l'utilisateur. Le second problème a régler est le fait que au départ avant au chargement de la page avant le premier appui sur le bouton, le state est vide puisque son contenu n'est générer par la fonction genererCitation qui ne s'exécute que lors de l'évènement click sur le bouton. Ce qui provoque un écran vide lors du rafraichissement ou du premier chargement de la page.
+
+Pour résoudre le problème du state vide au premier chargement, on peut donner au state une valeur par défaut en dur au state qui ne s'affichera qu'au démarrage ou au rafraichissement de la page. Dès que l'on clique sur le bouton, le contenu du state est remplacé par la citation générer aléatoirement par la fonction et une citation aléatoire est affichée.
+
+```
+
+```
