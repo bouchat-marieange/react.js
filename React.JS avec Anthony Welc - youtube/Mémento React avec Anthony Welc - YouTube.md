@@ -359,8 +359,113 @@ render(
 
 Il nous reste cependant encore 2 problèmes à régler à ce stade. Le fait qu'il est possible que aléatoirement, la même citation puisse être choisie aléatoirement 2 fois de suite et donc ne pas modifier l'affichage malgrès l'appui sur le bouton par l'utilisateur. Le second problème a régler est le fait que au départ avant au chargement de la page avant le premier appui sur le bouton, le state est vide puisque son contenu n'est générer par la fonction genererCitation qui ne s'exécute que lors de l'évènement click sur le bouton. Ce qui provoque un écran vide lors du rafraichissement ou du premier chargement de la page.
 
-Pour résoudre le problème du state vide au premier chargement, on peut donner au state une valeur par défaut en dur au state qui ne s'affichera qu'au démarrage ou au rafraichissement de la page. Dès que l'on clique sur le bouton, le contenu du state est remplacé par la citation générer aléatoirement par la fonction et une citation aléatoire est affichée.
+Pour résoudre le problème du state vide au premier chargement, on peut donner au state une valeur par défaut en dur au state qui ne s'affichera qu'au démarrage ou au rafraichissement de la page. Dès que l'on clique sur le bouton, le contenu du state est remplacé par la citation générer aléatoirement par la fonction et une citation aléatoire est affichée. On peut de manière plus propre et interactive résoudre ce problème autrement en lançant la fonction qui indique le contenu du stat dès le premier affichage ou rafraichissement. Ce sera la matière du chapitre suivant.
 
+``` javascript
+class App extends React.Component {
+
+  state = {
+    citation: 'Coucou',
+    auteur: 'Anthony'
+  };
+}
 ```
 
+## Partie 4 : Les cycles de vie dans ReactJS
+
+Dans ce chapitre on va régler les 2 problèmes qui se posait dans la version de notre générateur de citation dans l'état où nous l'avions laissé la dernière fois.
+
+Problème à résoudre:
+
+* Une même citation qui s'affiche 2 fois de suite lorsque l'on clique sur le bouton "Une autre citation"
+
+* Un texte citation + auteur qui s'affiche en dur au lancement de la page ou lorsque l'on rafraichit la page. Nous voudrions que dès le lancement de la page, la fonction genererCitation soit lancée pour afficher directement une citation aléatoire au lieu d'un texte en dur qui est toujour le même "Coucou"- Anthony
+
+### Etre certain que c'est chaque fois une fois une citation différente qui s'affiche et jamais 2 fois la même lorsque l'on appuie sur le bouton "Une autre citation"
+
+On va procéder avec du javascript classique en vérifiant si la nouvelle citation que l'on veut passer dans cette ligne de code this.setState(citations[randomKey]); est la même que celle que l'on a actuellement dans notre State. Si elle est identique on demandera à la fonction de générer un nouveau nombre aléatoire pour afficher une autre citation jusqu'à ce que celle-ci soit différente de celle stockée actuellement dans le State.
+
+On va donc écrire ce code avec une condition juste avant la ligne
+```Javascript
+this.setState(citations[randomKey]);
 ```
+Ce qui nous donnera le code suivant qui évitera donc qu'une même citation sorte 2 fois de suite:
+
+``` javascript
+genererCitation = event => {
+  // On  transforme citations en Array et on récupère toutes les clefs de cet objet qui sont stockée dans la constante keyArray
+  const keyArray = Object.keys(citations);
+  console.log(keyArray); // Test qui permet à chaque click sur le bouton d'afficher le tableau reprenant les clefs du tableau citations
+  // Un citation au hasard en utilisant la fonction floor (arrondir) et Math.random pour générer un nombre aléatoire * la longueur du tableau (array.length)
+  const randomKey = keyArray[Math.floor(Math.random() * keyArray.length)];
+  console.log(randomKey); //Test pour voir si à chaque clique de bouton, dans l'onglet console du dev tools de chrome, il affiche bien une clef de citation différente et alétoire à chaque click sur le bouton. Exemple citation 8, citation 4, citation 10 etc...
+
+  if (this.state.citation === citations[randomKey].citation){ // si la citation actuellement stockée dans le state et affichée est la même que celle qui va être envoyée aléatoirement alors ...
+    this.genererCitation(); // tu relance la fonction genererCitation pour fournir une nouvelle citation différente
+    return;// puis tu arrête et tu sors de là et donc tu n'exécute pas la suite du code qui remplacerait juste la citation actuelle par la même citation dans le State, ce qui est l'inverse de ce que l'on veut obtenir.
+  }
+
+  this.setState(citations[randomKey]); // On définit notre State qui était rester vide jusqu'ici en le générant aléatoirement en fonction de la clef aléatoire qui aura été choisie.
+};
+```
+
+### Les cycles de vie de React c'est quoi?
+
+Pour résoudre le second problème c'est à dire que l'on voudrait qu'une citation aléatoire soit affichée dès le lancement ou le rafraichissement de la page à la place d'un texte en dur, il faut parler des cycles de vie de React.
+
+Les cycles de vie de React c'est quoi? Ce sont des moment où on peu lui dire que juste avant que l'application soit montée (se lance), exécute ce petit bout de code, ou juste après que l'application soit montée exécute ce petit bout de code, ou au moment où l'application reçoit une mise à jour, fait ce petit bout de code. Par exemple on pourrait demander à React à chaque fois que le State change joue une animation, ou à chaque fois que le State est mis à jour, sauvegarde le contenu du précédent State (ex: la dernière citation) dans la base de données,...
+
+Ce que nous allons faire c'est demander à React juste avant que l'application se monte (ne soit chargée pour la première fois ou rafraichie), exécute la fonction genererCitation qui va remplir le State avec une citation aléatoire dès le lancement de la page ou de son rafraichissement. On insèrerea ce code dans le fichier index.js juste après la déclaration de state. On va donc créer au départ un State vide puisqu'il sera générer automatiquement au lancement de la page.
+
+``` Javascript
+class App extends React.Component {
+
+  state = {};// On défini un state vide au départ, ce qu'il contiendra sera déterminé et affiché (citation aléatoire) dès le lancement ou rafraichissement de la page grâce à la ligne componentWillMount() qui lance la fonction genererCitation au lancement de la page.
+
+  componentWillMount(){
+    this.genererCitation();//Dès le lancement de la page, la fonction genererCitation est lancée pour définir aléatoirement le contenu du State (citation + auteur) qui sera afficher au lancement ou au rafraichissement de la page
+  }
+
+  genererCitation = event => {
+    // On  transforme citations en Array et on récupère toutes les clefs de cet objet qui sont stockée dans la constante keyArray
+    const keyArray = Object.keys(citations);
+    console.log(keyArray); // Test qui permet à chaque click sur le bouton d'afficher le tableau reprenant les clefs du tableau citations
+    // Un citation au hasard en utilisant la fonction floor (arrondir) et Math.random pour générer un nombre aléatoire * la longueur du tableau (array.length)
+    const randomKey = keyArray[Math.floor(Math.random() * keyArray.length)];
+    console.log(randomKey); //Test pour voir si à chaque clique de bouton, dans l'onglet console du dev tools de chrome, il affiche bien une clef de citation différente et alétoire à chaque click sur le bouton. Exemple citation 8, citation 4, citation 10 etc...
+
+    if (this.state.citation === citations[randomKey].citation){ // si la citation actuellement stockée dans le state et affichée est la même que celle qui va être envoyée aléatoirement alors ...
+      this.genererCitation(); // tu relance la fonction genererCitation pour fournir une nouvelle citation différente
+      return;// puis tu arrête et tu sors de là et donc tu n'exécute pas la suite du code qui remplacerait juste la citation actuelle par la même citation dans le State, ce qui est l'inverse de ce que l'on veut obtenir.
+    }
+
+    this.setState(citations[randomKey]); // On définit notre State qui était rester vide jusqu'ici en le générant aléatoirement en fonction de la clef aléatoire qui aura été choisie.
+  };
+
+  render() {
+    return (
+      // Il est indispensable que la totalité de notre code html soit contenue dans une div globale car sinon on aura une erreur car la totalité du contenu html sera importé impérativement dans la div globale portant id "root" dans le fichier index.html
+      <div>
+        <p>
+          {/* On récupére le contenu du state citation+ auteur qui ne contient plus qu'une seule citation définie au hasard en fonction de sa clef (citation1, citation2, ...) stocké dans un tableau par notre fonction gerenerCitation */}
+          {this.state.citation}
+          <span>- {this.state.auteur}</span>
+        </p>
+        {/* Ici le e est une écriture abrégée pour dire event */}
+        <button onClick={e => this.genererCitation(e)}>Une autre citation !</button>
+      </div>
+      )
+  }
+}
+```
+
+Pour en apprendre plus sur les cycles de vie de React, je vous invite à vous rendre sur la page : https://reactjs.org/docs/react-component.html qui explique tout ce qu'il y a à savoir sur React.Component. Il s'agit de la documentation officielle. Les sections Mounting concerne le moment où la page est montée (chargée), Updating le moment d'une mise à jour, ...
+Cette documentation est particulièremen importante si on désire aller plus loin dans sa connaissance de React
+
+## Chapitre 5 : Les props ReactJS
+
+Dans ce chapitre nous allons voir comment mieux structuré tous nos fichiers, car jusqu'ici, on a tout fait dans un seul fichier et ce qui serait bien c'est de diviser cela dans plusieurs fichiers pour que ce soit plus facilement maintenable, plus clair à lire et plus simple à gérer si vous travailler à plusieurs sur un même projet.
+
+###  Comment bien organiser ses fichiers dans un code ReactJS
+
+Notre générateur de citations fonctionne bien mais il y a encore moyen de l'améliorer en réorganisant notre code dans différents fichiers pour en faciliter la maintenance ou le partage du travail en équipe.
