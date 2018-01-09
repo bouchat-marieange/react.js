@@ -4,7 +4,7 @@ body {
 }
 
 *::selection {
-  color: white; 
+  color: white;
   background: #F50057;
 }
 
@@ -22,7 +22,7 @@ body {
 
 #root > * {
 	width: 960px;
-	
+
 }
 
 span {
@@ -50,4 +50,3 @@ button:active {
 	transform: translateY(5px);
 	box-shadow: 0px 1px 5px rgba(0,0,0,0.4);
 }
-
