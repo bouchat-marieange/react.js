@@ -469,3 +469,180 @@ Dans ce chapitre nous allons voir comment mieux structuré tous nos fichiers, ca
 ###  Comment bien organiser ses fichiers dans un code ReactJS
 
 Notre générateur de citations fonctionne bien mais il y a encore moyen de l'améliorer en réorganisant notre code dans différents fichiers pour en faciliter la maintenance ou le partage du travail en équipe.
+
+Dans le dossier src de notre dossier de travail, on va créer un nouveau sous-dossier appellé "components" et dans ce sous-dossier, on va créer un fichier appelé App.js.
+
+On va partager notre code comme ceci:
+
+* index.js s'occupera du rendu (lorsque l'on a des applications plus complexes, c'est également dans ce fichier que sera tout le systeme de routage (la gestion des url directement à l'intérieur de react). Ici ce n'est pas nécessaire car on a n'a besoin que d'une seule page pour afficher notre générateur de citations)
+
+* App.js va être un components (c'est pourquoi on l'a placé dans un sous-dossier components)
+
+On va copier tout le code que contient notre fichier index.js et le coller dans notre fichier App.js.
+On supprime dans App.js la partie de code qui se charge du rendu car c'est le fichier index.js qui se chargera de cette partie.
+
+```Javascript
+//On réalise le rendu du component App créé juste au dessus
+render(
+  <App />, // On va cherche notre component
+  document.getElementById('root') // On indique où on veut qu'il soit afficher dans index.html
+  );
+```
+
+On peut donc aussi au début du fichier App.js supprimer la ligne qui import react-dom qui s'occupe du rendu gérer par index.js
+
+```Javascript
+import { render } from 'react-dom'; // On importe ReactDom pour le rendu, l'affichage de la page
+```
+
+On supprime aussi dans App.js la ligne qui importe la feuille de style index.css qui est déja importée dans index.js
+
+```Javascript
+import './index.css'; // On importe la feuille de style lié au component
+```
+
+Dans index.js, on va supprimer la ligne qui importe le fichier citation.js
+
+```Javascript
+import citations from './citations';// On importe le fichier citation à partir de son emplacement par rapport au fichier index.js donc ./ puisque dans le même dossier, suivi du nom de fichier sans son extension automatiquement reconnu par React
+```
+
+Par contre il va être nécessaire de modifier le chemin de l'import du fichier citations qui se trouve dans App.js car celui-ci a changer puisque maintenant App.js se trouve dans un sous-dossier et plus au même niveau que citations.js. Le nouveau code pour l'importation du fichier citations.js dans App.js est donc le suivant:
+
+```Javascript
+import citations from '../citations';// On importe le fichier citation à partir de son emplacement par rapport au fichier App.js qui se trouve dans le sous-dossier components donc ../ pour remonter d'un niveau est sortir du sous-dossier components puis / suivi du nom de fichier sans son extension automatiquement reconnu par React
+```
+
+Dans notre fichier App.js qui est une component il est une partie indispensable à tout les components que nous allons devoir ajouter pour permettre de l'exporter. On ajoute donc à la fin du code la ligne suivante
+
+```Javascript
+export default App; // permet d'exporter notre component App. C'est une partie indispensable dans tous les components.
+```
+
+Dans mon fichier index.js, je vais supprimer toute la partie qui fait partie du component App.js. Je supprime donc dans index.js une grand partie du code pour ne gardé donc dans index.js que le code suivant :
+
+```Javascript
+import React from 'react'; // On importe React
+import { render } from 'react-dom'; // On importe ReactDom pour le rendu, l'affichage de la page
+import './index.css'; // On importe la feuille de style lié au component
+
+//On réalise le rendu du component App créé juste au dessus
+render(
+  <App />, // On va cherche notre component
+  document.getElementById('root') // On indique où on veut qu'il soit afficher dans index.html
+);
+```
+Par contre à ce stade, le programme va renvoyé une erreur pour nous indique "App is not define" car on appelle App.js dans le code de index.js à la ligne <App /> mais il ne sais pas où le trouver.En fait App.js est un component et donc doit avoir une partie de son code pour l'export mais dans la page index.js, il faut importer App.js. On doit donc ajouter dans le début du dossier juste avant l'import du css une ligne pour importer le component App en lui indiquant le chemin entre index.js et App.js soit ./components.App.
+
+```javascript
+import App from './components/App'; // On importe le component App.js à partir du sous-dossier components
+```
+
+Jusqu'à présent on a juste séparé la partie rendu (index.js) de la partie component (App.js). Par contre ce qui pourrait être intéressant ce serait de pouvoir afficher ma citation aléatoire à d'autres endroits de mon site. On va donc créer un component qui va juste reprendre la partie du rendu responsable de l'affichage de la citation aléatoire et que l'on va appeler citation.js et qui contiendra uniquement la partie responsable de l'affichage de ceci :
+
+```Javascript
+<p>
+  {/* On récupére le contenu du state citation+ auteur qui ne contient plus qu'une seule citation définie au hasard en fonction de sa clef (citation1, citation2, ...) stocké dans un tableau par notre fonction gerenerCitation */}
+  {this.state.citation}
+  <span>- {this.state.auteur}</span>
+</p>
+```
+On va donc couper cette partie de code dans index.js pour aller la coller dans le nouveau fichier citation.js que l'on va créer.
+
+On va dans le sous-dossier components, on crée un nouveau fichier appellé citation.js et dans ce dossier on va mettre le code suivant:
+
+```Javascript
+import React from 'react';// On importe React
+
+class Citation extends React.Component{ // On se crée une nouvelle class Citation qui contient au minimum un render qui va renvoyer du jsx
+  render(){
+    return(
+      <p>
+        {/* On récupére le contenu du state citation+ auteur qui ne contient plus qu'une seule citation définie au hasard en fonction de sa clef (citation1, citation2, ...) stocké dans un tableau par notre fonction gerenerCitation */}
+        {this.state.citation}
+        <span>- {this.state.auteur}</span>
+      </p>
+    )
+  }
+}
+```
+
+On va alors rencontrer plusieurs problème. Tout d'abord this.state n'existe pas, car on n'a pas de state. On va régler ce problème après.
+On va également devoir importer le fichier citation.js dans App.js en ajoutant la ligne suivante dans les import en début du fichier App.js
+
+```Javascript
+import React from 'react'; // On importe React
+import Citation from './Citation'; // On importe le fichier Citation (qui contient uniquement la citation et auteur)
+import citations from '../citations';// On importe le fichier citation à partir de son emplacement par rapport au fichier index.js donc ./ puisque dans le même dossier, suivi du nom de fichier sans son extension automatiquement reconnu par React
+```
+
+Dans le fichier citation.js, il faut également créer un export pour que cela fonctionne, on ajoute donc le code suivant à la fin du fichier citation.js.
+
+```Javascript
+export default Citation;
+```
+A ce stade on a une erreur qui nous dit que Citation est bien importé mais pas utiliser. On va donc procéder comme on l'avait fait avec App pour appeller un component <Citation />. On aura donc dans le render du fichier App.js le code suivant:
+
+```Javascript
+render() {
+  return (
+    // Il est indispensable que la totalité de notre code html soit contenue dans une div globale car sinon on aura une erreur car la totalité du contenu html sera importé impérativement dans la div globale portant id "root" dans le fichier index.html
+    <div>
+      <Citation /> On va donc appeller le component citation.js (components/citation.js)
+      {/* Ici le e est une écriture abrégée pour dire event */}
+      <button onClick={e => this.genererCitation(e)}>Une autre citation !</button>
+    </div>
+    )
+}
+```
+Il reste toujours une erreur "Cannot read property 'citation' of null at Citations.render. Ce problème est lié au fait que dans le code de citation.js on fait référence à un state qui n'existe pas.
+
+Pour corriger cette erreur on va devoir utiliser des props. Les props permettent en effet de passer des données d'un components à un autre. Des props peuvent permettre de passer une infinité de chose comme des fonctions, des objets, une chaîne de caractère, un nombre, ... On peut passer ce que l'on veut dans les props et ils arrivent fréquement qu'on utilise plusieurs props quand on a plusieurs choses à transmettre d'un component à un autre.On les différencie grâce à leur nom par exemple
+
+### Création d'un props dans un component
+<Citation details={this.state}/>
+
+### Récupération d'un props dans un autre component
+{this.props.details.citation}
+
+
+Pour passer une props ont va tout simplement lui donner un attribut. Donc dans le fichier App.js on va modifier le code comme ceci:
+
+```Javascript
+render() {
+  return (
+    // Il est indispensable que la totalité de notre code html soit contenue dans une div globale car sinon on aura une erreur car la totalité du contenu html sera importé impérativement dans la div globale portant id "root" dans le fichier index.html
+    <div>
+      <Citation details={this.state}/> //On va donc appeller le component citation.js (components/citation.js). On passe toutes les données du State dans un props appelé details (on peut changer ce nom si on le souhaite). Le props details va donc transmettre tout le contenu du state à cet endroit
+      {/* Ici le e est une écriture abrégée pour dire event */}
+      <button onClick={e => this.genererCitation(e)}>Une autre citation !</button>
+    </div>
+    )
+}
+```
+
+Maintenant il va falloir récupérer ce props dans le fichier citation.js. On fait cela avec le code suivant:
+
+```Javascript
+import React from 'react';// On importe React
+
+class Citation extends React.Component{ // On se crée une nouvelle class Citation qui contient au minimum un render qui va renvoyer du jsx
+  render(){
+    return(
+      <p>
+        {/* On récupére le contenu du state citation+ auteur qui ne contient plus qu'une seule citation définie au hasard en fonction de sa clef (citation1, citation2, ...) stocké dans un tableau par notre fonction gerenerCitation */}
+        {this.props.details.citation}
+        {/* On récupère le props details qui est un objet contenant une citation et un auteur, et on précise qu'on ne veut sur cette ligne récupérer que la citation */}
+        <span>- {this.props.details.auteur}</span>
+        {/* On récupère le props details qui est un objet contenant une citation et un auteur, et on précise qu'on ne veut sur cette ligne récupérer que l'auteur */}
+      </p>
+    )
+  }
+}
+export default Citation;
+```
+Voilà, l'application fonctionne à nouveau normalement grâce à l'utilisation du props details qui a permis d'exporter le contenu du state du component app.js au component citation.js.
+
+Donc à chaque nouvel appui sur le bouton et également au lancement et au rafraichissement de la page, la fonction présente dans app.js appelée genererCitation est lancée. Cette fonction va choisir au hasard une citation + auteur en fonction de sa clef (citation1, citation2, ...) dans le fichier citations.js et ensuite va placer la citation selectionnée dans le state. Le contenu du state sera ensuite transmis du fichier App.js au fichier citation.js via un props appelé details.
+
+ 
