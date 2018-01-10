@@ -53,7 +53,7 @@ Pour afficher quelque chose en React voici la marche à suivre (toujours entre l
 ReactDOM.render(<h1>Hello World</h1>, document.getElementById('main'));
 ```
 
-Dans ce code on peut placer un component que React va afficher, mais pour le test nous allons nous contenter d'afficher la balise html <h1> avec un titre, suivi de la commande connue en javascritp .getElementById('main')); et on affiche donc ce titre h1 dans la page l'intérieur des balises portant l'id "main" que nous avons précédement créé. En gros on dit je veux afficher ça à cet endroit ci.
+Dans ce code on peut placer un component que React va afficher, mais pour le test nous allons nous contenter d'afficher la balise html h1 avec un titre, suivi de la commande connue en javascritp .getElementById('main')); et on affiche donc ce titre h1 dans la page l'intérieur des balises portant l'id "main" que nous avons précédement créé. En gros on dit je veux afficher ça à cet endroit ci.
 
 Mais bon on ne va pas écrire tout notre code html à cet endroit, C'est pour cette raison que l'on va créer un composant qui contiendra notre code HTML et qui sera affiché ensuite.
 
